@@ -1,6 +1,21 @@
 require("dotenv").config();
-const server = require("http").createServer();
 
+const cors = require("cors");
+const express = require("express");
+
+const app = express();
+const server = require("http").createServer(app);
+
+// Connect to db
+const db = require("./db");
+db();
+
+// Routes
+app.use(cors());
+app.use(express.json());
+app.use("/api", require("./routes"));
+
+// Socket connection
 const io = require("socket.io")(server, {
   cors: {
     origin: "http://localhost:3000",
