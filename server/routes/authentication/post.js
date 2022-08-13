@@ -20,10 +20,10 @@ module.exports = async function (req, res) {
 
     const user = await User.findOne({ email });
 
-    if (!(user && user.comparePassword(password))) {
+    if (!(user && (await user.comparePassword(password)))) {
       return res
         .status(401)
-        .status({ message: "Either email or password is incorrect" });
+        .json({ message: "Either email or password is incorrect" });
     }
 
     const data = {

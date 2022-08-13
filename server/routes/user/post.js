@@ -19,6 +19,14 @@ module.exports = async function (req, res) {
     const { firstName, lastName, email, password } =
       await bodySchema.validateAsync(body, { stripUnknown: true });
 
+    // Check if email already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ message: "User with that email already exists" });
+    }
+
     const user = await new User({
       firstName,
       lastName,
